@@ -3,7 +3,10 @@
   "builds": [
     {
       "src": "express-server.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["data.json"]
+      }
     },
     {
       "src": "frontend/package.json",

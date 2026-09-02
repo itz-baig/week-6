@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import fs from 'node:fs/promises';
+import path from 'node:path';
 
 
 const app = express();
@@ -8,13 +9,15 @@ app.use(cors());
 app.use(express.json());
 const PORT = 3000;
 
+const DATA_FILE = path.join(process.cwd(), 'data.json');
+
 async function loadData() {
 
   try {
-    const fileData = await fs.readFile('./data.json','utf8');
+    const fileData = await fs.readFile(DATA_FILE, 'utf8');
     return JSON.parse(fileData);
   } catch (error) {
-    console.log(error);
+    console.log("loadData error:", error);
     return [];
   }
 }
@@ -32,7 +35,7 @@ app.post('/data', async (req,res) => {
   const newData = req.body;
   const data = await loadData();
   data.push(newData);
-  await fs.writeFile('./data.json',JSON.stringify(data,null,2));
+  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2));
 
   res.status(201).json({message:"Data saved successfully", item:newData});
 });
@@ -46,7 +49,7 @@ app.put('/data/:uuid', async (req, res) => {
   if (itemIndex !== -1){
     data[itemIndex] = {...data[itemIndex], ...updatedItem};
     
-    await fs.writeFile('./data.json', JSON.stringify(data, null, 2));
+    await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2));
 
     res.status(200).json({message:'Data updated successfully', updatedItem:data[itemIndex]});
   } else {
@@ -60,7 +63,7 @@ app.delete('/data/:uuid', async (req, res) => {
   const newData = data.filter(d => d.uuid !== id);
 
   if (newData.length !== data.length){
-    await fs.writeFile('./data.json', JSON.stringify(newData, null, 2));
+    await fs.writeFile(DATA_FILE, JSON.stringify(newData, null, 2));
     res.status(200).json({message: 'Item deleted successfully'});
   } else {
     res.status(404).json({message: 'Item not found'});

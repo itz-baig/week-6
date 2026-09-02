@@ -24,7 +24,7 @@ export default function AddDestinationForm({onDestinationAdd}) {
             uuid:crypto.randomUUID()
         }
         try{
-            const response = await fetch('http://localhost:3000/data',{
+            const response = await fetch('/data',{
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'

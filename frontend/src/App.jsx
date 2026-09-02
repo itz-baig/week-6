@@ -17,7 +17,7 @@ export default function App() {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('http://localhost:3000/data');
+      const response = await fetch('/data');
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
       }
@@ -35,7 +35,7 @@ export default function App() {
   async function deleteDestination(uuid) {
 
     try {
-      const response = await fetch(`http://localhost:3000/data/${uuid}`,{
+      const response = await fetch(`/data/${uuid}`,{
         method:'DELETE'
       });
 
@@ -49,7 +49,7 @@ export default function App() {
 
   async function updateDestination(uuid, updateData) {
     try {
-      const response = await fetch(`http://localhost:3000/data/${uuid}`,{
+      const response = await fetch(`/data/${uuid}`,{
         method:'PUT',
         headers:{
           'Content-Type': 'application/json',
